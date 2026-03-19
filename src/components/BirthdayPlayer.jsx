@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { ChatCircleDots, Image, MusicNotes } from "@phosphor-icons/react";
+import { ChatCircleDots, Image, MusicNotes, Play, Pause, SkipBack, SkipForward } from "@phosphor-icons/react";
 import { config } from "../config";
 import TabPesan from "./TabPesan";
 import TabGaleri from "./TabGaleri";
@@ -185,11 +185,11 @@ export default function BirthdayPlayer() {
 
         {/* Playback controls */}
         <div className="playback-row">
-          <button className="ctrl-btn" style={disabledStyle} onClick={prevSong}>⏮</button>
+          <button className="ctrl-btn" style={disabledStyle} onClick={prevSong}><SkipBack size={18} weight="fill" /></button>
           <button className="ctrl-btn play-btn" style={disabledStyle} onClick={togglePlay}>
-            {isPlaying ? "⏸" : "▶"}
+            {isPlaying ? <Pause size={22} weight="fill" /> : <Play size={22} weight="fill" />}
           </button>
-          <button className="ctrl-btn" style={disabledStyle} onClick={nextSong}>⏭</button>
+          <button className="ctrl-btn" style={disabledStyle} onClick={nextSong}><SkipForward size={18} weight="fill" /></button>
         </div>
 
         <div className="vol-row">
