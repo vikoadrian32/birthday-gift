@@ -437,7 +437,7 @@ body {
 .open-btn {
   display: block;
   width: 162px;
-  margin: 12px auto 10px;
+  margin: 12px auto 15px;
   background: linear-gradient(180deg, #2ea02e 0%, #1a6e1a 100%);
   color: #fff;
   border: none;

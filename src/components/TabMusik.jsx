@@ -13,89 +13,30 @@ export default function TabMusik({
   onPrev,
   onNext,
   expanded = false,
-  onYTReady,
+  ytRef,
+  ytReady,
 }) {
-  const [progress, setProgress]     = useState(0);
+  const [progress, setProgress]       = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration]     = useState(0);
-  const timerRef    = useRef(null);
-  const playerRef   = useRef(null);
-  const readyRef    = useRef(false); // apakah YT player sudah siap
+  const [duration, setDuration]       = useState(0);
+  const timerRef = useRef(null);
 
   const allSongs   = [...config.laguDefault, ...songs];
   const activeSong = currentSong >= 0 && allSongs[currentSong] ? allSongs[currentSong] : null;
 
-  // ── Load YouTube IFrame API sekali ──
+  // Reset progress saat lagu ganti
   useEffect(() => {
-    if (window.YT && window.YT.Player) {
-      createPlayer();
-      return;
-    }
-    if (!document.getElementById("yt-api-script")) {
-      const tag = document.createElement("script");
-      tag.id  = "yt-api-script";
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
-    }
-    window.onYouTubeIframeAPIReady = createPlayer;
-    return () => { window.onYouTubeIframeAPIReady = null; };
-  }, []);
-
-  const createPlayer = () => {
-    if (playerRef.current) return;
-    playerRef.current = new window.YT.Player("yt-hidden-player", {
-      height: "1",
-      width: "1",
-      videoId: "",
-      playerVars: { autoplay: 0, controls: 0, rel: 0, playsinline: 1 },
-      events: {
-        onReady: (e) => {
-          readyRef.current = true;
-          onYTReady && onYTReady(e.target);
-        },
-        onStateChange: (e) => {
-          // ENDED = 0
-          if (e.data === 0) onNext && onNext();
-        },
-      },
-    });
-  };
-
-  // ── Ganti lagu saat currentSong berubah ──
-  useEffect(() => {
-    const player = playerRef.current;
-    if (!player || !readyRef.current || !activeSong?.youtubeId) return;
-
-    // Reset progress dulu
     setProgress(0);
     setCurrentTime(0);
     setDuration(0);
+  }, [currentSong]);
 
-    // Langsung load & play video baru (menghentikan yang lama otomatis)
-    if (isPlaying) {
-      player.loadVideoById(activeSong.youtubeId);
-    } else {
-      player.cueVideoById(activeSong.youtubeId);
-    }
-  }, [currentSong]); // hanya trigger saat lagu ganti
-
-  // ── Sync play/pause (tanpa ganti lagu) ──
-  useEffect(() => {
-    const player = playerRef.current;
-    if (!player || !readyRef.current) return;
-    if (isPlaying) {
-      player.playVideo?.();
-    } else {
-      player.pauseVideo?.();
-    }
-  }, [isPlaying]);
-
-  // ── Progress timer ──
+  // Progress timer — baca langsung dari ytRef milik BirthdayPlayer
   useEffect(() => {
     clearInterval(timerRef.current);
-    if (!isPlaying) return;
+    if (!isPlaying || !ytReady) return;
     timerRef.current = setInterval(() => {
-      const player = playerRef.current;
+      const player = ytRef?.current;
       if (!player || typeof player.getCurrentTime !== "function") return;
       const cur = player.getCurrentTime() || 0;
       const dur = player.getDuration() || 0;
@@ -104,10 +45,10 @@ export default function TabMusik({
       setProgress(dur ? (cur / dur) * 100 : 0);
     }, 500);
     return () => clearInterval(timerRef.current);
-  }, [isPlaying]);
+  }, [isPlaying, ytReady, currentSong]);
 
   const handleSeek = (e) => {
-    const player = playerRef.current;
+    const player = ytRef?.current;
     if (!player || typeof player.seekTo !== "function") return;
     const rect  = e.currentTarget.getBoundingClientRect();
     const ratio = (e.clientX - rect.left) / rect.width;
@@ -126,11 +67,6 @@ export default function TabMusik({
 
   return (
     <div className="musik-area">
-
-      {/* YouTube player tersembunyi */}
-      <div style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
-        <div id="yt-hidden-player" />
-      </div>
 
       {/* ── NOW PLAYING ── */}
       <div className="np-card">
