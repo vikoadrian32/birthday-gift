@@ -1,48 +1,117 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { config } from "../config";
 
-export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlaying, onPlayPause, onPrev, onNext, expanded = false }) {
+const getThumb = (youtubeId) =>
+  `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`;
 
-  const [progress, setProgress] = useState(0);
+export default function TabMusik({
+  songs = [],
+  currentSong,
+  onLoad,
+  isPlaying,
+  onPlayPause,
+  onPrev,
+  onNext,
+  expanded = false,
+  onYTReady,
+}) {
+  const [progress, setProgress]     = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [durations, setDurations] = useState({});
+  const [duration, setDuration]     = useState(0);
+  const timerRef    = useRef(null);
+  const playerRef   = useRef(null);
+  const readyRef    = useRef(false); // apakah YT player sudah siap
 
-  const allSongs = [...config.laguDefault, ...songs];
+  const allSongs   = [...config.laguDefault, ...songs];
   const activeSong = currentSong >= 0 && allSongs[currentSong] ? allSongs[currentSong] : null;
 
+  // ── Load YouTube IFrame API sekali ──
   useEffect(() => {
-    const audio = audioRef?.current;
-    if (!audio) return;
-    const handleTimeUpdate = () => {
-      setCurrentTime(audio.currentTime);
-      setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
-    };
-    const handleLoadedMetadata = () => setDuration(audio.duration);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-    };
-  }, [audioRef]);
+    if (window.YT && window.YT.Player) {
+      createPlayer();
+      return;
+    }
+    if (!document.getElementById("yt-api-script")) {
+      const tag = document.createElement("script");
+      tag.id  = "yt-api-script";
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    }
+    window.onYouTubeIframeAPIReady = createPlayer;
+    return () => { window.onYouTubeIframeAPIReady = null; };
+  }, []);
 
-  useEffect(() => {
-    allSongs.forEach((song, i) => {
-      if (durations[i] !== undefined) return;
-      const a = new Audio(song.src);
-      a.addEventListener("loadedmetadata", () => {
-        setDurations(prev => ({ ...prev, [i]: a.duration }));
-      });
+  const createPlayer = () => {
+    if (playerRef.current) return;
+    playerRef.current = new window.YT.Player("yt-hidden-player", {
+      height: "1",
+      width: "1",
+      videoId: "",
+      playerVars: { autoplay: 0, controls: 0, rel: 0, playsinline: 1 },
+      events: {
+        onReady: (e) => {
+          readyRef.current = true;
+          onYTReady && onYTReady(e.target);
+        },
+        onStateChange: (e) => {
+          // ENDED = 0
+          if (e.data === 0) onNext && onNext();
+        },
+      },
     });
-  }, [allSongs.length]);
+  };
+
+  // ── Ganti lagu saat currentSong berubah ──
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player || !readyRef.current || !activeSong?.youtubeId) return;
+
+    // Reset progress dulu
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(0);
+
+    // Langsung load & play video baru (menghentikan yang lama otomatis)
+    if (isPlaying) {
+      player.loadVideoById(activeSong.youtubeId);
+    } else {
+      player.cueVideoById(activeSong.youtubeId);
+    }
+  }, [currentSong]); // hanya trigger saat lagu ganti
+
+  // ── Sync play/pause (tanpa ganti lagu) ──
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player || !readyRef.current) return;
+    if (isPlaying) {
+      player.playVideo?.();
+    } else {
+      player.pauseVideo?.();
+    }
+  }, [isPlaying]);
+
+  // ── Progress timer ──
+  useEffect(() => {
+    clearInterval(timerRef.current);
+    if (!isPlaying) return;
+    timerRef.current = setInterval(() => {
+      const player = playerRef.current;
+      if (!player || typeof player.getCurrentTime !== "function") return;
+      const cur = player.getCurrentTime() || 0;
+      const dur = player.getDuration() || 0;
+      setCurrentTime(cur);
+      setDuration(dur);
+      setProgress(dur ? (cur / dur) * 100 : 0);
+    }, 500);
+    return () => clearInterval(timerRef.current);
+  }, [isPlaying]);
 
   const handleSeek = (e) => {
-    const audio = audioRef?.current;
-    if (!audio || !audio.duration) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    audio.currentTime = (x / rect.width) * audio.duration;
+    const player = playerRef.current;
+    if (!player || typeof player.seekTo !== "function") return;
+    const rect  = e.currentTarget.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    player.seekTo(ratio * (player.getDuration() || 0), true);
   };
 
   const formatTime = (sec) => {
@@ -52,14 +121,22 @@ export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlayi
     return `${m}:${s}`;
   };
 
+  const thumbSrc = (song) =>
+    song?.thumbnail || (song?.youtubeId ? getThumb(song.youtubeId) : null);
+
   return (
     <div className="musik-area">
+
+      {/* YouTube player tersembunyi */}
+      <div style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
+        <div id="yt-hidden-player" />
+      </div>
 
       {/* ── NOW PLAYING ── */}
       <div className="np-card">
         <div className="np-thumb-wrap">
-          {activeSong?.thumbnail ? (
-            <img className="np-thumb" src={activeSong.thumbnail} alt={activeSong.judul} />
+          {thumbSrc(activeSong) ? (
+            <img className="np-thumb" src={thumbSrc(activeSong)} alt={activeSong?.judul} />
           ) : (
             <div className="np-thumb-placeholder"><span>♪</span></div>
           )}
@@ -68,7 +145,7 @@ export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlayi
 
         <div className="np-info">
           <div className="np-title">{activeSong ? activeSong.judul : "Pilih Lagu"}</div>
-          <div className="np-artist">{activeSong ? (activeSong.artis || "—") : "upload MP3 di bawah"}</div>
+          <div className="np-artist">{activeSong ? (activeSong.artis || "—") : "pilih lagu di bawah"}</div>
           <div className="np-status">{isPlaying ? "▶ Playing" : activeSong ? "⏸ Paused" : ""}</div>
         </div>
 
@@ -88,7 +165,7 @@ export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlayi
         <span className="prog-time">{formatTime(duration)}</span>
       </div>
 
-      {/* ── CONTROLS — hanya tampil saat expanded (modal OPEN) ── */}
+      {/* ── CONTROLS — hanya muncul saat expanded ── */}
       {expanded && (
         <div className="musik-ctrl-row">
           <button className="musik-ctrl-btn" onClick={onPrev}>⏮</button>
@@ -109,8 +186,8 @@ export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlayi
               onClick={() => onLoad(null, i)}
             >
               <div className="song-row-thumb">
-                {s.thumbnail ? (
-                  <img src={s.thumbnail} alt={s.judul} />
+                {thumbSrc(s) ? (
+                  <img src={thumbSrc(s)} alt={s.judul} />
                 ) : (
                   <span>{i === currentSong ? "♪" : "○"}</span>
                 )}
@@ -120,7 +197,7 @@ export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlayi
                 <div className="song-row-artist">{s.artis || "—"}</div>
               </div>
               <div className="song-row-dur">
-                {durations[i] ? formatTime(durations[i]) : "--:--"}
+                {i === currentSong ? formatTime(duration) : "--:--"}
               </div>
             </div>
           ))
@@ -128,8 +205,6 @@ export default function TabMusik({ songs, currentSong, onLoad, audioRef, isPlayi
           <div className="song-empty">Belum ada lagu</div>
         )}
       </div>
-
-      
     </div>
   );
 }

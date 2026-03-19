@@ -26,10 +26,9 @@ const getNow = () => {
   return d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
 };
 
-export default function TabPesan({ onNext, expanded = false }) {
+export default function TabPesan({ onNext, onFinish, onFirstReply, expanded = false }) {
   const [pesan, setPesan]           = useState([]);
   const [typing, setTyping]         = useState(false);
-  const [disabled, setDisabled]     = useState(false);
   const [input, setInput]           = useState("");
   const [replyCount, setReplyCount] = useState(0);
   const [step, setStep]             = useState(0);
@@ -45,7 +44,6 @@ export default function TabPesan({ onNext, expanded = false }) {
   useEffect(() => {
     if (initDone.current) return;
     initDone.current = true;
-
     const first = config.pesanAwal[0];
     setTimeout(() => {
       setPesan([{ ...first, waktu: getNow() }]);
@@ -63,6 +61,9 @@ export default function TabPesan({ onNext, expanded = false }) {
     const next = replyCount + 1;
     setReplyCount(next);
 
+    // Begitu user kirim pesan pertama → unlock semua tombol di parent
+    if (next === 1) onFirstReply?.();
+
     if (step === 1) {
       setTyping(true);
       setTimeout(() => {
@@ -79,6 +80,7 @@ export default function TabPesan({ onNext, expanded = false }) {
         const akhir = config.pesanAkhir;
         setPesan((prev) => [...prev, { id: Date.now() + 1, teks: akhir.teks, dari: akhir.dari, waktu: getNow() }]);
         setFinished(true);
+        onFinish?.(); // ← beritahu BirthdayPlayer bahwa chat sudah selesai
       }, 2000);
     }
   };

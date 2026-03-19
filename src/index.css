@@ -474,22 +474,44 @@ body {
 }
 .nav-arrow:hover { background: rgba(0,0,0,0.5); }
 
+/* ---- TAB BUTTONS (iOS icon style) ---- */
 .tab-btn {
-  width: 52px; height: 52px;
-  background: rgba(0,0,0,0.25);
-  border: 2px solid rgba(255,255,255,0.13);
-  border-radius: 10px;
-  color: rgba(255,255,255,0.65);
-  font-size: 20px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.18s;
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.55);
+  font-size: 22px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.18s ease,
+              background 0.18s ease;
 }
+
 .tab-btn.active {
-  background: rgba(255,255,255,0.94);
-  border-color: var(--accent);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  transform: translateY(-1px);
+  /* dikontrol via inline style di BirthdayPlayer — jangan override di sini */
+  all: unset;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+  border: 2px solid rgba(255,255,255,0.25);
+  transform: translateY(-2px) scale(1.08);
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.18s ease;
+}
+
+.tab-btn:active, .tab-btn.active:active {
+  transform: scale(0.92) !important;
 }
 
 /* ---- DOTS ---- */
@@ -874,3 +896,4 @@ body {
   font-size: 14px;
   color: rgba(26,42,10,0.4);
 }
+

@@ -36,7 +36,29 @@ export const config = {
 
   // --- LAGU (taruh file MP3 di folder public/music/) ---
   laguDefault: [
-    { judul: "Always", artis: "Daniel Caesar", src: "/music/videoplayback.weba", thumbnail : "/thumbnail/always.jpg" },
-    { judul: "Around", artis: "Niki", src: "/music/Around.mp3", thumbnail : "/thumbnail/around.jpg" },
+     {
+      judul: "you!",
+      artis: "LANY",
+      youtubeId: "HEAn4FqXFY4",
+      thumbnail: null, // otomatis pakai thumbnail YouTube
+    },
+    { 
+      judul: "Always", 
+      artis: "Daniel Caesar", 
+      youtubeId: "pKFd12id5oQ",
+      thumbnail : null 
+    },
+    {
+      judul : "Best Part",
+      artis : "Daniel Caesar feat. H.E.R.",
+      youtubeId : "zNhtz0Lygik",
+      thumbnail : null,
+    },
+    {
+      judul : "Prettiest Thing I've Ever Seen",
+      artis : "LANY",
+      youtubeId : "U7kUGqGCNpw",
+      thumbnail : null,
+    }
   ],
 };
