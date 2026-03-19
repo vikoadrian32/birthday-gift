@@ -26,9 +26,9 @@ export const config = {
 
   // --- FOTO GALERI ---
   foto: [
-    { id: 1, src: "/public/photos/photo1.jpg", label: "Foto 1" },
-    { id: 2, src: "/public/photos/photo2.webp", label: "Foto 2" },
-    { id: 3, src: "/public/photos/photo3.jpg", label: "Foto 3" },
+    { id: 1, src: "/photos/photo1.jpg", label: "Foto 1" },
+    { id: 2, src: "/photos/photo2.webp", label: "Foto 2" },
+    { id: 3, src: "/photos/photo3.jpg", label: "Foto 3" },
     { id: 4, src: null, label: "Foto 4" },
     { id: 5, src: null, label: "Foto 5" },
     { id: 6, src: null, label: "Foto 6" },
@@ -36,7 +36,7 @@ export const config = {
 
   // --- LAGU (taruh file MP3 di folder public/music/) ---
   laguDefault: [
-    { judul: "Always", artis: "Daniel Caesar", src: "/public/music/videoplayback.weba", thumbnail : "/public/thumbnail/always.jpg" },
-    { judul: "Around", artis: "Niki", src: "/public/music/Around.mp3", thumbnail : "/public/thumbnail/around.jpg" },
+    { judul: "Always", artis: "Daniel Caesar", src: "/music/videoplayback.weba", thumbnail : "/thumbnail/always.jpg" },
+    { judul: "Around", artis: "Niki", src: "/music/Around.mp3", thumbnail : "/thumbnail/around.jpg" },
   ],
 };
