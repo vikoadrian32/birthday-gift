@@ -80,8 +80,8 @@ export default function TabMusik({
         </div>
 
         <div className="np-info">
-          <div className="np-title">{activeSong ? activeSong.judul : "Pilih Lagu"}</div>
-          <div className="np-artist">{activeSong ? (activeSong.artis || "—") : "pilih lagu di bawah"}</div>
+          <div className="np-title">{activeSong ? activeSong.judul : "Play lagunya dlu yuk"}</div>
+          <div className="np-artist">{activeSong ? (activeSong.artis || "—") : "di pilih ya!"}</div>
           <div className="np-status">{isPlaying ? "▶ Playing" : activeSong ? "⏸ Paused" : ""}</div>
         </div>
 

@@ -243,7 +243,7 @@ body {
   font-size: 6px;
   color: var(--maroon);
   background: rgba(212,160,23,0.3);
-  padding: 3px 7px;
+  padding: 10px 15px;
   border-radius: 5px;
   border: none;
   cursor: pointer;

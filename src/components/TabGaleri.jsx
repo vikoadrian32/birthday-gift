@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef,useEffect, useState } from "react";
 import { config } from "../config";
 
 export default function TabGaleri({ onSwitchToMusik, expanded = false }) {
@@ -9,6 +9,53 @@ export default function TabGaleri({ onSwitchToMusik, expanded = false }) {
   const fotoKanan = config.foto.filter((_, i) => i % 2 !== 0);
   const heights   = [110, 135, 280, 85, 100, 90];
   const rotations = [-2, 1.5, -1, 2.5, -1.8, 1.2];
+
+  const [showBtn, setShowBtn] = useState(false);
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    // Reset dulu setiap kali
+    setShowBtn(false);
+
+    const el = scrollRef.current;
+    if (!el) return;
+
+    // Delay kecil agar DOM sudah benar-benar visible & terukur
+    const timeout = setTimeout(() => {
+      const check = () => {
+        if (el.scrollHeight <= el.clientHeight) setShowBtn(true);
+      };
+
+      const images = el.querySelectorAll("img");
+      if (images.length === 0) { check(); return; }
+
+      let loaded = 0;
+      const onLoad = () => {
+        loaded++;
+        if (loaded >= images.length) check();
+      };
+
+      images.forEach((img) => {
+        if (img.complete) loaded++;
+        else img.addEventListener("load", onLoad);
+      });
+
+      if (loaded >= images.length) check();
+
+      return () => {
+        images.forEach((img) => img.removeEventListener("load", onLoad));
+      };
+    }, 150); // tunggu tab visible
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const handleScroll = (e) => {
+    const el = e.currentTarget;
+    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 30;
+    if (nearBottom) setShowBtn(true);
+  };
+  
 
   return (
     <>
@@ -59,14 +106,42 @@ export default function TabGaleri({ onSwitchToMusik, expanded = false }) {
           background: transparent;
           color: #555;
         }
+          .next-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 10px 12px 6px;
+  }
+  .next-btn-retro {
+    width: 100%;
+    padding: 8px 0;
+    background: linear-gradient(180deg, #8B2525 0%, #6B1A1A 50%, #4A0E0E 100%);
+    color: #D4A017;
+    border-top: 2px solid #c04040;
+    border-left: 2px solid #c04040;
+    border-right: 2px solid #2a0808;
+    border-bottom: 2px solid #2a0808;
+    border-radius: 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #1a0505, 0 6px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: all 0.1s ease;
+    text-shadow: 0 0 8px rgba(212,160,23,0.6);
+  }
+  .next-btn-retro:hover {
+    background: linear-gradient(180deg, #a03030 0%, #7a2020 50%, #5a1212 100%);
+    color: #f0c040;
+  }
+  .next-btn-retro:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #1a0505;
+  }
       `}</style>
 
       {/* Header */}
       <div className="galeri-header">
         <span className="galeri-title">Galeri</span>
-        <button className="galeri-music-link" onClick={onSwitchToMusik}>
-          ♪ Musik ➤
-        </button>
       </div>
 
       {/* Sub tabs */}
@@ -88,7 +163,10 @@ export default function TabGaleri({ onSwitchToMusik, expanded = false }) {
       {/* Canvas area */}
       {activeTab === "foto" ? (
         config.foto.length > 0 ? (
-          <div style={{
+          <div
+          ref= {scrollRef}
+          onScroll={handleScroll} 
+          style={{
             background: "#e8e0d0",
             borderRadius: "8px",
             margin: "8px",
@@ -169,6 +247,14 @@ export default function TabGaleri({ onSwitchToMusik, expanded = false }) {
       ) : (
         <div style={{ textAlign:"center", padding:"30px 10px", fontFamily:"'VT323',monospace", fontSize:"15px", color:"rgba(26,42,10,0.5)" }}>
           Belum ada video.<br />Tambah nanti ya 🎬
+        </div>
+      )}
+
+      {showBtn && (
+        <div className="next-wrapper">
+          <button className="next-btn-retro" onClick={onSwitchToMusik}>
+            NEXT LAGI.... ➤
+          </button>
         </div>
       )}
 

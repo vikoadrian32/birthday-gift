@@ -62,9 +62,9 @@ export default function TabPesan({ onNext, onFinish, onFirstReply, expanded = fa
     setReplyCount(next);
 
     // Begitu user kirim pesan pertama → unlock semua tombol di parent
-    if (next === 1) onFirstReply?.();
+    if (next === 2) onFirstReply?.();
 
-    if (step === 1) {
+    if (step === 1) { 
       setTyping(true);
       setTimeout(() => {
         setTyping(false);
@@ -159,7 +159,7 @@ export default function TabPesan({ onNext, onFinish, onFirstReply, expanded = fa
       {finished && (
         <div className="next-wrapper">
           <button className="next-btn-retro" onClick={onNext}>
-            ▶ BUKA GALERI ◀
+            ▶ NEXT YA!! ◀
           </button>
         </div>
       )}
