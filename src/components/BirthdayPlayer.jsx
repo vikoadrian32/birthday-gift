@@ -216,7 +216,7 @@ export default function BirthdayPlayer() {
   const disabledStyle = !chatDone ? {
     opacity: 0.35,
     cursor: "not-allowed",
-    pointerEvents: "none"
+    pointerEvents: "none",
   } : {};
 
   const disableButtonStyle = !tabUnlocked
@@ -307,10 +307,13 @@ export default function BirthdayPlayer() {
         </div>
 
         {/* OPEN */}
-
-        <button
+      
+       <button
           className="open-btn"
-          style={disabledStyle}
+          style={{
+            ...disabledStyle,
+             visibility: activeTab === 0 ? "hidden" : "visible",
+          }}
           onClick={() => chatDone && setIsOpen(true)}
         >
           ⛶ OPEN
@@ -338,11 +341,15 @@ export default function BirthdayPlayer() {
                 key={t}
                 className={`tab-btn ${isActive ? "active" : ""}`}
                 style={{
-                  ...(activeTab !== 2 ? disableTabClick : {}),
-                  ...(i !== 0 && !isActive ? disableButtonStyle : {}),
-                  ...(isActive
-                    ? { background: iconData.bg, color: iconData.color, opacity: 1 }
-                    : { color: "rgba(255,255,255,0.6)" })
+                  ... (!tabUnlocked ? disableTabClick: {}),
+                  ... (isActive ? {
+                    background: iconData.bg,
+                    color: iconData.color,
+                    opacity: 1,
+                  } : {
+                    color : "rgba(255,255,255,0.6)",
+                    opacity : tabUnlocked ? 1 : 0.35,
+                  })
                 }}
                 onClick={() => goToTab(i)}
               >

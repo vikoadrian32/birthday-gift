@@ -26,7 +26,7 @@ const getNow = () => {
   return d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
 };
 
-// Cari pesan berdasarkan id
+
 const getPesanById = (id) => config.pesanAwal.find((p) => p.id === id);
 
 function OpsiPanel({ opsiAktif, onPilih }) {
@@ -77,7 +77,7 @@ export default function TabPesan({ onNext, onFinish, onFirstReply, expanded = fa
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
   }, [pesan, typing, opsiAktif]);
 
-  // Tampilkan pesan "teman" berdasarkan objek pesan, dengan typing bubble
+  
   const tampilkanPesan = (msgObj, delay = 600) => {
     setTimeout(() => {
       setTyping(true);
@@ -264,7 +264,7 @@ export default function TabPesan({ onNext, onFinish, onFirstReply, expanded = fa
         }
       `}</style>
 
-      <div className="pesan-header">— PESAN —</div>
+      <div className="pesan-header">— Message —</div>
 
       <div
         className="chat-area"
