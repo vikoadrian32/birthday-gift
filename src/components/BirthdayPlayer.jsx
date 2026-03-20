@@ -233,6 +233,10 @@ export default function BirthdayPlayer() {
     }
   : {};
 
+  const disablePlaybackStyle = (!tabUnlocked && activeTab !== 2)
+  ? { opacity: 0.35, cursor: "not-allowed" }
+  : {};
+
   // =========================
   // PROPS
   // =========================
@@ -371,7 +375,7 @@ export default function BirthdayPlayer() {
 
           <button
             className="ctrl-btn"
-            style={disableButtonStyle}
+            style={disablePlaybackStyle}
             onClick={prevSong}
           >
             <SkipBack size={18} weight="fill" />
@@ -379,7 +383,7 @@ export default function BirthdayPlayer() {
 
           <button
             className="ctrl-btn play-btn"
-            style={disableButtonStyle}
+            style={disablePlaybackStyle}
             onClick={togglePlay}
           >
             {isPlaying
@@ -390,7 +394,7 @@ export default function BirthdayPlayer() {
 
           <button
             className="ctrl-btn"
-            style={disableButtonStyle}
+            style={disablePlaybackStyle}
             onClick={nextSong}
           >
             <SkipForward size={18} weight="fill" />
@@ -411,7 +415,7 @@ export default function BirthdayPlayer() {
             max="100"
             step="1"
             value={volume}
-            style={disableButtonStyle}
+            style={disablePlaybackStyle}
             onChange={(e) => chatDone && setVolume(Number(e.target.value))}
           />
 
