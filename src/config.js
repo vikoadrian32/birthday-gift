@@ -63,9 +63,9 @@ export const config = {
   ],
 
   wishes: [
-  { id: 1, dari: "Bestie 1", teks: "Selamat ulang tahun Nessa! Semoga selalu bahagia dan sehat ya! 🎉" },
-  { id: 2, dari: "Bestie 2", teks: "Happy birthday! Semoga impianmu semua terwujud tahun ini 💖" },
-  { id: 3, dari: "Bestie 3", teks: "HBD Nessa! Makin cantik, makin sukses, makin bahagia ya! ✨" },
-  { id: 4, dari: "Bestie 4", teks: "Selamat ulang tahun! Semoga panjang umur dan selalu dalam lindungan Allah 🌸" },
+  { id: 1, dari: "Eli", teks: "Selamat ulang tahun Nessa! Semoga selalu bahagia dan sehat ya! 🎉" },
+  { id: 2, dari: "Tasya", teks: "Happy birthday! Semoga impianmu semua terwujud tahun ini 💖" },
+  { id: 3, dari: "Clara", teks: "HBD Nessa! Makin cantik, makin sukses, makin bahagia ya! ✨" },
+  { id: 4, dari: "Cia", teks: "Selamat ulang tahun! Semoga panjang umur dan selalu dalam lindungan Allah 🌸" },
 ],
 };

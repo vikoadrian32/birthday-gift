@@ -26,14 +26,17 @@
 html, body, #root {
   min-height: 100vh;
   font-family: 'Nunito', sans-serif;
+  z-index: 1;
 }
 
 body {
-  background: radial-gradient(ellipse at center, #2a0808 0%, #0d0000 100%);
+  background: radial-gradient(ellipse at 30% 40%, #2a0808 0%, #0d0000 60%, #1a0505 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 /* ---- SCROLLBAR CUSTOM ---- */
