@@ -566,7 +566,7 @@ body {
 .vol-icon { color: rgba(255,255,255,0.55); font-size: 13px; }
 .vol-slider {
   flex: 1;
-  -webkit-appearance: none;
+  --webkit-appearance: none;
   height: 4px;
   border-radius: 2px;
   background: rgba(255,255,255,0.2);

@@ -14,12 +14,134 @@ export const config = {
   //   1. pesanAwal muncul otomatis dari kiri (dari kamu)
   //   2. Vanesa bisa ketik balasan → muncul di kanan
   //   3. Setelah Vanesa balas 2x → chat dikunci + pesanAkhir muncul di kiri
-  pesanAwal: [
-    // Pesan 1 dari kamu → kiri, muncul langsung
-    { id: 1, teks: "Hai nessa!", dari: "teman" },
-    // Pesan 2 dari kamu → kiri, muncul setelah jeda
-    { id: 2, teks: "happy birthday ya!🎉", dari: "teman"},
-  ],
+    pesanAwal: [
+  {
+    id: 1,
+    teks: "Hai nessa 😊",
+    dari: "teman",
+    opsi: [
+      {
+        teks: "Halo juga 🙌",
+        nextId: 2,
+        balasan: {
+          teks: "Wah dibales, kirain udah masuk arsip chat 😌",
+          dari: "teman",
+          opsi: [
+            { teks: "Gak dong, masih prioritas kok 😄", nextId: 2 },
+            { teks: "Iya nih, hampir aja… 😏", nextId: 2 }
+          ]
+        }
+      },
+      {
+        teks: "Ini siapa ya 🤔",
+        nextId: 3,
+        balasan: {
+          teks: "Yah udah lupa... padahal dulu lumayan sering ngobrol 😅",
+          dari: "teman",
+          opsi: [
+            { teks: "Oh iya inget… yang suka ngilang itu ya?", nextId: 5 },
+            { teks: "Waduh maaf 😭 clue dikit dong", nextId: 4 }
+          ]
+        }
+      }
+    ]
+  },
+
+  // FLOW: SUDAH KENAL (NORMAL)
+  {
+    id: 2,
+    teks: "Lama ga ngobrol ya 😄",
+    dari: "teman",
+    opsi: [
+      {
+        teks: "Iya juga ya",
+        nextId: 6
+      },
+      {
+        teks: "Iya nih, pada sibuk masing-masing",
+        nextId: 6
+      }
+    ]
+  },
+
+  // FLOW: MINTA CLUE
+  {
+    id: 4,
+    teks: "Clue ya… aku yang kadang suka ngilang tiba-tiba 😅",
+    dari: "teman",
+    opsi: [
+      {
+        teks: "Ohh iya inget sekarang 😂",
+        nextId: 5
+      },
+      {
+        teks: "Masih ga yakin sih 😭",
+        nextId: 5
+      }
+    ]
+  },
+
+  // FLOW: UDAH INGET SETELAH LUPA
+  {
+    id: 5,
+    teks: "Nah kan akhirnya inget juga 😌",
+    dari: "teman",
+    opsi: [
+      {
+        teks: "Iya dong wkwk",
+        nextId: 6
+      },
+      {
+        teks: "Agak telat sih ingetnya 😭",
+        nextId: 6
+      }
+    ]
+  },
+
+  // JEMBATAN SEBELUM BIRTHDAY
+  {
+    id: 6,
+    teks: "Ngomong-ngomong… hari ini kayaknya ada yang spesial deh 👀",
+    dari: "teman",
+    opsi: [
+      {
+        teks: "Apaan tuh?",
+        nextId: 7
+      },
+      {
+        teks: "Hmm… apa ya 🤔",
+        nextId: 7
+      }
+    ]
+  },
+
+  // BIRTHDAY REVEAL (BARU MASUK SINI)
+  {
+    id: 7,
+    teks: "Happy birthday yaa 🎉🎂",
+    dari: "teman",
+    opsi: [
+      {
+        teks: "Wah makasih banyak 😆",
+        balasan: {
+          teks: "Semoga makin dewasa… pelan-pelan aja juga gapapa 😌",
+          dari: "teman"
+        }
+      },
+      {
+        teks: "Hah serius hari ini?",
+        balasan: {
+          teks: "Iya lah 😭 masa aku lebih inget dari kamu sendiri",
+          dari: "teman",
+          opsi: [
+            { teks: "Fix aku butuh kalender baru 😂" },
+            { teks: "Pura-pura lupa biar dapet ucapan 😎" }
+          ]
+        }
+      }
+    ]
+  }
+],
 
   // Pesan akhir dari kamu → kiri, muncul setelah Vanesa balas 2x
   pesanAkhir: { teks: "Hehe... abis ini lanjut ke bagian selanjutnya yaa, hope you like it", dari: "teman" },
