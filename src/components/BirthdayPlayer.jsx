@@ -1,17 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { ChatCircleDots, Image, MusicNotes, Play, Pause, SkipBack, SkipForward } from "@phosphor-icons/react";
+import { ChatCircleDots, Image, MusicNotes, Play, Pause, SkipBack, SkipForward, EnvelopeIcon } from "@phosphor-icons/react";
 import { config } from "../config";
 import TabPesan from "./TabPesan";
 import TabGaleri from "./TabGaleri";
 import TabMusik from "./TabMusik";
 import Confetti from "./Confetti";
+import TabWish from "./TabWish";
 
-const TABS = ["pesan", "galeri", "musik"];
+const TABS = ["pesan", "galeri", "musik","wish"];
 
 const TAB_ICONS = {
   pesan:  { icon: <ChatCircleDots size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
   galeri: { icon: <Image size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
   musik:  { icon: <MusicNotes size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
+  wish:   { icon: <EnvelopeIcon  size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
 };
 
 export default function BirthdayPlayer() {
@@ -179,7 +181,7 @@ export default function BirthdayPlayer() {
       setConfetti(true);
     }
 
-    if (idx === 2) {
+    if (idx === 3) {
       setTabUnlocked(true);
     }
 
@@ -291,7 +293,11 @@ export default function BirthdayPlayer() {
           </div>
 
           <div className={`tab-content ${activeTab === 2 ? "active" : ""}`}>
-            <TabMusik {...musikProps} expanded={false} />
+            <TabMusik {...musikProps} expanded={false} onNextTab={() => switchTab(3)} />
+          </div>
+          
+          <div className={`tab-content ${activeTab === 3 ? "active" : ""}`}>
+            <TabWish />
           </div>
 
         </div>
@@ -412,6 +418,42 @@ export default function BirthdayPlayer() {
         </div>
 
       </div>
+
+       {/* Modal expanded */}
+      {isOpen && (
+        <div
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.82)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            style={{ width: "100%", maxWidth: "500px", height: "90vh", background: "#c8e8a8", borderRadius: "16px", border: "4px solid #2a1010", boxShadow: "inset 0 3px 10px rgba(0,0,0,0.3), 0 20px 60px rgba(0,0,0,0.6)", display: "flex", flexDirection: "column", overflow: "hidden" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px 12px", background: "rgba(255,255,255,0.25)", borderBottom: "2px solid rgba(0,0,0,0.1)", flexShrink: 0 }}>
+              <button onClick={() => setIsOpen(false)} style={{ background: "none", border: "none", color: "#4a1a1a", fontSize: "20px", cursor: "pointer" }}>✕</button>
+            </div>
+            <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              {activeTab === 0 && <TabPesan onNext={() => { switchTab(1); setIsOpen(false); }} onFirstReply={() => setChatDone(true)} expanded={true} />}
+              {activeTab === 1 && (
+                <div style={{ overflowY: "auto", height: "100%" }}>
+                  <TabGaleri onSwitchToMusik={() => { setActiveTab(2); setIsOpen(false); }} expanded={true} />
+                </div>
+              )}
+              {activeTab === 2 && (
+                <div style={{ overflowY: "auto", height: "100%" }}>
+                  <TabMusik {...musikProps} expanded={true} />
+                </div>
+              )}
+
+              {activeTab === 3 && (
+                <div style={{ overflowY: "auto", height: "100%" }}>
+                  <TabWish expanded={true} />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

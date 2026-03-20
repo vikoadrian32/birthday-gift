@@ -13,6 +13,7 @@ export default function TabMusik({
   onPrev,
   onNext,
   expanded = false,
+  onNextTab,
   ytRef,
   ytReady,
 }) {
@@ -67,6 +68,39 @@ export default function TabMusik({
 
   return (
     <div className="musik-area">
+         <style>{`
+        .next-wrapper {
+          display: flex;
+          justify-content: center;
+          padding: 10px 12px 6px;
+        }
+        .next-btn-retro {
+          width: 100%;
+          padding: 8px 0;
+          background: linear-gradient(180deg, #8B2525 0%, #6B1A1A 50%, #4A0E0E 100%);
+          color: #D4A017;
+          border-top: 2px solid #c04040;
+          border-left: 2px solid #c04040;
+          border-right: 2px solid #2a0808;
+          border-bottom: 2px solid #2a0808;
+          border-radius: 4px;
+          font-family: 'Press Start 2P', monospace;
+          font-size: 8px;
+          letter-spacing: 2px;
+          cursor: pointer;
+          box-shadow: 0 4px 0 #1a0505, 0 6px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+          transition: all 0.1s ease;
+          text-shadow: 0 0 8px rgba(212,160,23,0.6);
+        }
+        .next-btn-retro:hover {
+          background: linear-gradient(180deg, #a03030 0%, #7a2020 50%, #5a1212 100%);
+          color: #f0c040;
+        }
+        .next-btn-retro:active {
+          transform: translateY(3px);
+          box-shadow: 0 1px 0 #1a0505;
+        }
+      `}</style>
 
       {/* ── NOW PLAYING ── */}
       <div className="np-card">
@@ -141,6 +175,13 @@ export default function TabMusik({
           <div className="song-empty">Belum ada lagu</div>
         )}
       </div>
+      {onNextTab && (
+        <div className="next-wrapper">
+          <button className="next-btn-retro" onClick={onNextTab}>
+            ▶ NEXT YA!! ◀
+          </button>
+        </div>
+      )}
     </div>
   );
 }
