@@ -272,9 +272,34 @@ export default function TabPesan({ onNext, onFinish, onFirstReply, expanded = fa
         style={expanded ? { height: "calc(90vh - 165px)" } : {}}
       >
         {pesan.map((p) => (
-          <div key={p.id} className={`chat-bubble ${p.dari === "dia" ? "sent" : ""}`}>
-            {p.teks}
-            <span className="bubble-time">{p.waktu}</span>
+          <div key={p.id} style={{
+            display: "flex",
+            alignItems: "flex-end",
+            gap: "7px",
+            justifyContent: p.dari === "dia" ? "flex-end" : "flex-start",
+          }}>
+            {p.dari !== "dia" ? (
+              <div style={{
+                width: 28, height: 28,
+                borderRadius: "50%",
+                flexShrink: 0,
+                overflow: "hidden",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                background: "linear-gradient(135deg, #6B1A1A, #4A0E0E)",
+              }}>
+                {config.pengirim?.avatar
+                  ? <img src={config.pengirim.avatar} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                  : <span style={{ fontSize: 16 }}>🧑</span>
+                }
+              </div>
+            ) : null}
+
+            {/* Bubble */}
+            <div className={`chat-bubble ${p.dari === "dia" ? "sent" : ""}`}
+              style={{ maxWidth: "75%" }}>
+              {p.teks}
+              <span className="bubble-time">{p.waktu}</span>
+            </div>
           </div>
         ))}
         {typing && <TypingBubble />}

@@ -1,19 +1,21 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { ChatCircleDots, Image, MusicNotes, Play, Pause, SkipBack, SkipForward, EnvelopeIcon } from "@phosphor-icons/react";
+import { ChatCircleDots, Image, MusicNotes, Play, Pause, SkipBack, SkipForward, EnvelopeIcon , GameControllerIcon } from "@phosphor-icons/react";
 import { config } from "../config";
 import TabPesan from "./TabPesan";
 import TabGaleri from "./TabGaleri";
 import TabMusik from "./TabMusik";
 import Confetti from "./Confetti";
 import TabWish from "./TabWish";
+import TabGame from "./TabGame";
 
-const TABS = ["pesan", "galeri", "musik","wish"];
+const TABS = ["pesan", "galeri", "musik","wish","game"];
 
 const TAB_ICONS = {
   pesan:  { icon: <ChatCircleDots size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
   galeri: { icon: <Image size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
   musik:  { icon: <MusicNotes size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
   wish:   { icon: <EnvelopeIcon  size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
+  game : { icon: <GameControllerIcon size={26} weight="fill" />, bg: "#ffffff", color: "#1a1a1a" },
 };
 
 export default function BirthdayPlayer() {
@@ -304,6 +306,10 @@ export default function BirthdayPlayer() {
             <TabWish />
           </div>
 
+          <div className={`tab-content ${activeTab === 4 ? "active" : ""}`}>
+            <TabGame onWin={() => setConfetti(true)} />
+          </div>
+
         </div>
 
         {/* OPEN */}
@@ -437,7 +443,7 @@ export default function BirthdayPlayer() {
           onClick={() => setIsOpen(false)}
         >
           <div
-            style={{ width: "100%", maxWidth: "500px", height: "90vh", background: "#c8e8a8", borderRadius: "16px", border: "4px solid #2a1010", boxShadow: "inset 0 3px 10px rgba(0,0,0,0.3), 0 20px 60px rgba(0,0,0,0.6)", display: "flex", flexDirection: "column", overflow: "hidden" }}
+            style={{ width: "100%", maxWidth: "360px", height: "90vh", background: "#c8e8a8", borderRadius: "16px", border: "4px solid #2a1010", boxShadow: "inset 0 3px 10px rgba(0,0,0,0.3), 0 20px 60px rgba(0,0,0,0.6)", display: "flex", flexDirection: "column", overflow: "hidden" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px 12px", background: "rgba(255,255,255,0.25)", borderBottom: "2px solid rgba(0,0,0,0.1)", flexShrink: 0 }}>
@@ -459,6 +465,12 @@ export default function BirthdayPlayer() {
               {activeTab === 3 && (
                 <div style={{ overflowY: "auto", height: "100%" }}>
                   <TabWish expanded={true} />
+                </div>
+              )}
+
+              {activeTab === 4 && (
+                <div style={{ height:"100%" }}>
+                  <TabGame onWin={() => { setConfetti(true); setIsOpen(false); }} />
                 </div>
               )}
             </div>

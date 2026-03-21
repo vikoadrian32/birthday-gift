@@ -7,14 +7,13 @@ export const config = {
   namaPenerima: "Vanesa",       // Nama yang muncul di judul
   umur: 21,                     // Umur ulang tahun
 
-  // --- SKRIP PERCAKAPAN ---
-  // "teman" = kamu (pengirim hadiah) → bubble KIRI
-  // "dia"   = Vanesa (penerima)      → bubble KANAN
-  // Alur:
-  //   1. pesanAwal muncul otomatis dari kiri (dari kamu)
-  //   2. Vanesa bisa ketik balasan → muncul di kanan
-  //   3. Setelah Vanesa balas 2x → chat dikunci + pesanAkhir muncul di kiri
-    pesanAwal: [
+  pengirim: {
+      nama : "V",
+      avatar : "/photos/avatar.jpg" ,
+      initial : null
+  },
+
+  pesanAwal: [
   {
     id: 1,
     teks: "Hai nessa 😊",
@@ -190,4 +189,8 @@ export const config = {
   { id: 3, dari: "Clara", teks: "HBD Nessa! Makin cantik, makin sukses, makin bahagia ya! ✨" },
   { id: 4, dari: "Cia", teks: "Selamat ulang tahun! Semoga panjang umur dan selalu dalam lindungan Allah 🌸" },
 ],
+
+game: {
+  playerSprite: "/photos/char.png", // taruh PNG di sini
+},
 };

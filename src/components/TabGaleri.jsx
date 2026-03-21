@@ -163,79 +163,151 @@ export default function TabGaleri({ onSwitchToMusik, expanded = false }) {
       {/* Canvas area */}
       {activeTab === "foto" ? (
         config.foto.length > 0 ? (
-          <div
-          ref= {scrollRef}
-          onScroll={handleScroll} 
-          style={{
-            background: "#e8e0d0",
-            borderRadius: "8px",
-            margin: "8px",
-            padding: "12px",
-            boxShadow: "inset 0 2px 8px rgba(0,0,0,0.15)",
-            overflowY: "auto",
-            maxHeight: expanded ? "calc(90vh - 160px)" : "195px",
-          }}>
-            <div className="masonry-wrap">
-              {/* Kolom Kiri */}
-              <div className="masonry-col">
-                {fotoKiri.map((f, i) => {
-                  const h = heights[(i * 2) % heights.length];
-                  const rot = rotations[(i * 2) % rotations.length];
-                  return (
-                    <div
-                      key={f.id}
-                      className="masonry-card"
-                      style={{
-                        transform: `rotate(${rot}deg)`,
-                        background: "#fff",
-                        padding: "5px 5px 18px 5px",
-                        borderRadius: "3px",
-                        border: "none",
-                        boxShadow: "2px 3px 8px rgba(0,0,0,0.3)",
-                        overflow: "visible",
-                      }}
-                      onClick={() => f.src && setLightbox(f)}
-                    >
-                      {f.src ? (
-                        <img src={f.src} alt={f.label} className="masonry-img" style={{ height: h }} />
-                      ) : (
-                        <div className="masonry-placeholder" style={{ height: h }}>📷</div>
-                      )}
-                      <div className="masonry-label">{f.label}</div>
-                    </div>
-                  );
-                })}
-              </div>
+          <div style={{ margin: "8px", position: "relative" }}>
 
-              {/* Kolom Kanan */}
-              <div className="masonry-col" style={{ marginTop: 28 }}>
-                {fotoKanan.map((f, i) => {
-                  const h = heights[(i * 2 + 1) % heights.length];
-                  const rot = rotations[(i * 2 + 1) % rotations.length];
-                  return (
-                    <div
-                      key={f.id}
-                      className="masonry-card"
-                      style={{
-                        transform: `rotate(${rot}deg)`,
-                        background: "#fff",
-                        padding: "5px 5px 18px 5px",
-                        borderRadius: "3px",
-                        border: "none",
-                        boxShadow: "2px 3px 8px rgba(0,0,0,0.3)",
-                        overflow: "visible",
-                      }}
-                      onClick={() => f.src && setLightbox(f)}
-                    >
-                      {f.src ? (
-                        <img src={f.src} alt={f.label} className="masonry-img" style={{ height: h }} />
-                      ) : (
-                        <div className="masonry-placeholder" style={{ height: h }}>📷</div>
-                      )}
-                      <div className="masonry-label">{f.label}</div>
-                    </div>
-                  );
-                })}
+            {/* Canvas foto utama */}
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              style={{
+                background: "#e8e0d0",
+                borderRadius: "0 0 8px 8px",
+                padding: "16px 12px 12px",
+                boxShadow: "inset 0 2px 8px rgba(0,0,0,0.15)",
+                overflowY: "auto",
+                maxHeight: expanded ? "calc(90vh - 180px)" : "185px",
+                position: "relative",
+              }}
+            >
+               <div style={{ position: "relative", marginBottom: "-2px" }}>
+                <svg width="100%" height="60" viewBox="0 0 300 60" preserveAspectRatio="none">
+                  {/* Tali kiri */}
+                  <path d="M0,8 Q75,35 150,12 Q225,35 300,8" fill="none" stroke="#D4A017" strokeWidth="1.2" strokeDasharray="none"/>
+
+                  {/* Flag HAPPY */}
+                  {['H','A','P','P','Y'].map((l, i) => {
+                    const x = 8 + i * 28; 
+                    return (
+                      <g key={i}>
+                        <polygon
+                          points={`${x},10 ${x+20},10 ${x+20},32 ${x+10},40 ${x},32`}
+                          fill="#6B1A1A" stroke="#D4A017" strokeWidth="1"
+                        />
+                        <text x={x+10} y={27} textAnchor="middle"
+                          fontFamily="serif" fontSize="11" fontWeight="bold" fill="#D4A017">
+                          {l}
+                        </text>
+                      </g>
+                    );
+                  })}
+
+                  
+                  <path d="M150,12 Q225,35 300,8" fill="none" stroke="#D4A017" strokeWidth="1.2"/>
+
+               
+                  {['B','I','R','T','H','D','A','Y'].map((l, i) => {
+                    const x = 152 + i * 18.5;
+                    return (
+                      <g key={i}>
+                        <polygon
+                          points={`${x},14 ${x+15},14 ${x+15},32 ${x+7.5},40 ${x},32`}
+                          fill="#8B2525" stroke="#D4A017" strokeWidth="0.8"
+                        />
+                        <text x={x+7.5} y={28} textAnchor="middle"
+                          fontFamily="serif" fontSize="9" fontWeight="bold" fill="#D4A017">
+                          {l}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            
+              <div style={{
+                position: "absolute", top: 6, left: 8,
+                fontSize: 14, opacity: 0.4, color: "#D4A017",
+              }}>✦</div>
+              <div style={{
+                position: "absolute", top: 6, right: 8,
+                fontSize: 14, opacity: 0.4, color: "#D4A017",
+              }}>✦</div>
+
+              
+              {[
+                {top:10,left:'15%',color:'#D4A017',size:5},
+                {top:10,left:'35%',color:'#8B2525',size:4},
+                {top:10,left:'55%',color:'#D4A017',size:6},
+                {top:10,left:'75%',color:'#8B2525',size:4},
+                {top:10,left:'90%',color:'#D4A017',size:5},
+              ].map((d,i) => (
+                <div key={i} style={{
+                  position: "absolute",
+                  top: d.top, left: d.left,
+                  width: d.size, height: d.size,
+                  borderRadius: "50%",
+                  background: d.color,
+                  opacity: 0.5,
+                }}/>
+              ))}
+
+              <div className="masonry-wrap">
+                {/* Kolom Kiri */}
+                <div className="masonry-col">
+                  {fotoKiri.map((f, i) => {
+                    const h = heights[(i * 2) % heights.length];
+                    const rot = rotations[(i * 2) % rotations.length];
+                    return (
+                      <div key={f.id} className="masonry-card"
+                        style={{
+                          transform: `rotate(${rot}deg)`,
+                          background: "#fff",
+                          padding: "5px 5px 18px 5px",
+                          borderRadius: "3px",
+                          border: "none",
+                          boxShadow: "2px 3px 8px rgba(0,0,0,0.3)",
+                          overflow: "visible",
+                        }}
+                        onClick={() => f.src && setLightbox(f)}
+                      >
+                        {f.src ? (
+                          <img src={f.src} alt={f.label} className="masonry-img" style={{ height: h }} />
+                        ) : (
+                          <div className="masonry-placeholder" style={{ height: h }}>📷</div>
+                        )}
+                        <div className="masonry-label">{f.label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Kolom Kanan */}
+                <div className="masonry-col" style={{ marginTop: 28 }}>
+                  {fotoKanan.map((f, i) => {
+                    const h = heights[(i * 2 + 1) % heights.length];
+                    const rot = rotations[(i * 2 + 1) % rotations.length];
+                    return (
+                      <div key={f.id} className="masonry-card"
+                        style={{
+                          transform: `rotate(${rot}deg)`,
+                          background: "#fff",
+                          padding: "5px 5px 18px 5px",
+                          borderRadius: "3px",
+                          border: "none",
+                          boxShadow: "2px 3px 8px rgba(0,0,0,0.3)",
+                          overflow: "visible",
+                        }}
+                        onClick={() => f.src && setLightbox(f)}
+                      >
+                        {f.src ? (
+                          <img src={f.src} alt={f.label} className="masonry-img" style={{ height: h }} />
+                        ) : (
+                          <div className="masonry-placeholder" style={{ height: h }}>📷</div>
+                        )}
+                        <div className="masonry-label">{f.label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
