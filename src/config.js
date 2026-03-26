@@ -23,33 +23,33 @@ export const config = {
         teks: "Halo juga 🙌",
         nextId: 2,
         balasan: {
-          teks: "Wah dibales, kirain udah masuk arsip chat 😌",
+          teks: "Njir dibales, kirain ga bakal dibales 😌",
           dari: "teman",
           opsi: [
-            { teks: "Gak dong, masih prioritas kok 😄", nextId: 2 },
-            { teks: "Iya nih, hampir aja… 😏", nextId: 2 }
+            { teks: "Gak dong... Yakali", nextId: 2 },
+            { teks: "Niatnya emang gitu… 😏", nextId: 2 }
           ]
         }
       },
       {
-        teks: "Ini siapa ya 🤔",
+        teks: "Ini siapa ya?",
         nextId: 3,
         balasan: {
-          teks: "Yah udah lupa... padahal dulu lumayan sering ngobrol 😅",
+          teks: "adalah pokoknya... wkwkwk",
           dari: "teman",
           opsi: [
-            { teks: "Oh iya inget… yang suka ngilang itu ya?", nextId: 5 },
-            { teks: "Waduh maaf 😭 clue dikit dong", nextId: 4 }
+            { teks: "yaelahh.. wkwkkwkw", nextId: 6 },
+            { teks: "Dih.. kasih tau dong", nextId: 4 }
           ]
         }
-      }
+      },
     ]
   },
 
   // FLOW: SUDAH KENAL (NORMAL)
   {
     id: 2,
-    teks: "Lama ga ngobrol ya 😄",
+    teks: "wkwkwk, btw lama gak ngobrol yah",
     dari: "teman",
     opsi: [
       {
@@ -66,11 +66,11 @@ export const config = {
   // FLOW: MINTA CLUE
   {
     id: 4,
-    teks: "Clue ya… aku yang kadang suka ngilang tiba-tiba 😅",
+    teks: "hmmm harusnya udah tau juga sih...",
     dari: "teman",
     opsi: [
       {
-        teks: "Ohh iya inget sekarang 😂",
+        teks: "wkwkkwkw ywdah deh",
         nextId: 5
       },
       {
@@ -83,24 +83,21 @@ export const config = {
   // FLOW: UDAH INGET SETELAH LUPA
   {
     id: 5,
-    teks: "Nah kan akhirnya inget juga 😌",
+    teks: "WKKWKWKWK",
     dari: "teman",
     opsi: [
       {
-        teks: "Iya dong wkwk",
+        teks: "Dih malah ketawa",
         nextId: 6
       },
-      {
-        teks: "Agak telat sih ingetnya 😭",
-        nextId: 6
-      }
+      
     ]
   },
 
   // JEMBATAN SEBELUM BIRTHDAY
   {
     id: 6,
-    teks: "Ngomong-ngomong… hari ini kayaknya ada yang spesial deh 👀",
+    teks: "wkwkwkwk.. btw hari ini kayaknya ada yang spesial deh 👀",
     dari: "teman",
     opsi: [
       {
